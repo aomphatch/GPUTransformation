@@ -54,6 +54,7 @@
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
         const cube = new THREE.Mesh(geometry, material);
+        cube.position.set(-2,1,0);
         cube.castShadow = true; // ✅ กล่องส่งเงา
         cube.receiveShadow = false; // ✅ กล่องไม่รับเงา (ไม่จำเป็น)
         scene.add(cube);
@@ -77,12 +78,46 @@
         plane.receiveShadow = true; // ✅ พื้นรับเงา
         scene.add(plane);
 
+
+        const keys = {}; // เก็บสถานะปุ่มที่กด
+
+        // ฟังค์ชันเมื่อปุ่มถูกกด
+        window.addEventListener('keydown', (event) => {
+            keys[event.key] = true;
+        });
+
+        // ฟังค์ชันเมื่อปล่อยปุ่ม
+        window.addEventListener('keyup', (event) => {
+            keys[event.key] = false;
+        });
+
+
         // ✅ render loop
         function animate(t) {
             cube.scale.x = 2;  //ขยายความยาวกล่องในแนวแกน x
             //cube.scale.y = 10;    // ขยายความยาวกล่องในแนวแกน y
             //cube.scale.z = 5;   // ขยายความยาวกล่องในแนวแกน  z
-            cube.rotation.z = t * 0.008;
+
+            if(keys['w']){
+                cube.position.y += 0.04;
+            }
+            else if(keys['s']){
+                cube.position.y -= 0.04;
+            }
+            else if(keys['a']){
+                cube.position.x -= 0.04;
+            }
+            else if(keys['d']){
+                cube.position.x += 0.04;
+            }
+            else if(keys['ArrowUp'] ){
+                cube.position.z -= 0.04;
+            }
+            else if(keys['ArrowDown']){
+                cube.position.z += 0.04;
+            }
+
+            cube.rotation.z = t * 0.003;
            // cube.rotation.y = t * 0.001;
 
             sphere.rotation.y = t * 0.001;
@@ -92,27 +127,28 @@
         }
         animate(0);
 
-        window.addEventListener('keydown', (event) => {
-            if(event.key == 'ArrowUp'){
+       /* window.addEventListener('keydown', (event) => {
+            if(event.key == 'w'){
                 cube.position.y += 0.04;
             }
-            else if(event.key == 'ArrowDown'){
+            else if(event.key == 's'){
                 cube.position.y -= 0.04;
             }
-            else if(event.key == 'ArrowLeft'){
-                cube.position.x -= 0.04;
+            else if(event.key == 'a'){
+                cube.position.x -= 0.05;
             }
-            else if(event.key == 'ArrowRight'){
-                cube.position.x += 0.04;
+            else if(event.key == 'd'){
+                cube.position.x += 0.05;
             }
-            else if(event.key == 'w'){
-                cube.position.z -= 0.04;
+            else if(event.key == 'ArrowUp'){
+                cube.position.z -= 0.05;
             }
-            else if(event.key == 's'){
-                cube.position.z += 0.04;
+            else if(event.key == 'ArrowDown'){
+                cube.position.z += 0.05;
             }
             
-        });
+        });*/
+        
 
     </script>
 </body>
